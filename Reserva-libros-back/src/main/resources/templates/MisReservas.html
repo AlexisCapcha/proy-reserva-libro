@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Préstamos - Biblioteca</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap & Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/fragments.css}">
+    <link rel="stylesheet" th:href="@{/css/misreservas.css}">
+</head>
+
+<body>
+    <div th:insert="~{fragments :: header}"></div>
+
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 p-3 sidebar">
+                <h4 class="text-primary mb-4">Mi Cuenta</h4>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/tucuenta}"><i class="bi bi-person-fill me-2"></i>Yo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/misreservas}"><i class="bi bi-calendar3 me-2"></i>Mis
+                            Préstamos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Sección de préstamos -->
+            <div class="col-md-9 col-lg-10 content-section">
+                <h2 class="text-primary fw-bold mb-4">Mis Préstamos</h2>
+
+                <!-- Mostrar si NO hay reservas -->
+                <div th:if="${#lists.isEmpty(reservas)}" class="alert alert-info text-center" role="alert">
+                    <i class="bi bi-info-circle me-2"></i>
+                    <strong>No tienes libros reservados</strong>
+                    <p class="mb-0 mt-2">¿Te interesa algún libro? <a th:href="@{/catalogo}" class="alert-link">Explora
+                            nuestro catálogo</a></p>
+                </div>
+
+                <!-- Mostrar si SÍ hay reservas -->
+                <div class="row g-4" th:if="${!#lists.isEmpty(reservas)}">
+                    <div class="col-md-6 col-lg-4" th:each="reserva : ${reservas}">
+                        <div class="card h-100 p-3">
+                            <h5 class="card-title">📘 <span th:text="${reserva.ejemplar.libro.titulo}">Título del
+                                    libro</span></h5>
+                            <h6 class="card-subtitle mb-2" th:text="${reserva.ejemplar.libro.autor}">Autor</h6>
+                            <p class="card-text">
+                                <strong>Fecha de préstamo:</strong>
+                                <span th:text="${#temporals.format(reserva.fechaReserva, 'dd/MM/yyyy')}">10/04/2025</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div th:insert="~{fragments :: footer}"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
