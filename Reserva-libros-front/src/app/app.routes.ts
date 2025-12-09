@@ -16,7 +16,7 @@ import { Usuarios } from './dashboard/usuarios/usuarios';
 import { Reservas } from './dashboard/reservas/reservas';
 import { Historial } from './dashboard/historial/historial';
 import { Atrasadas } from './dashboard/atrasadas/atrasadas';
-
+import { AdminGuard } from './guards/admin-guard';
 export const routes: Routes = [
     {
         path: '',
@@ -77,6 +77,7 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         component: DashboardNavbar,
+        canActivate: [AdminGuard],
         children: [
             {
                 path: '',

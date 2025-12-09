@@ -1,3 +1,4 @@
+// auth.service.ts (reemplazar/añadir)
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -14,7 +15,13 @@ export class AuthService {
 
   login(username: string, password: string): Observable<void> {
     return this.http.post<any>(this.apiUrl, { username, password }).pipe(
-      tap(user => {
+      tap(response => {
+        // Si tu backend devuelve { token, user }
+        const token = response.token ?? response?.token; // por seguridad
+        const user = response.user ?? response; // si antes devolvías solo user
+        if (token) {
+          localStorage.setItem('token', token);
+        }
         localStorage.setItem('usuario', JSON.stringify(user));
         this.userSubject.next(user);
         this.router.navigate(['/cuenta']);
@@ -27,6 +34,10 @@ export class AuthService {
     );
   }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
   getUsuario(): any {
     const usuario = localStorage.getItem('usuario');
     return usuario ? JSON.parse(usuario) : null;
@@ -34,12 +45,20 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('usuario');
+    localStorage.removeItem('token');
     this.userSubject.next(null);
     this.router.navigate(['/']);
   }
 
   isAuthenticated(): boolean {
-    return !!this.getUsuario();
+    return !!this.getToken() && !!this.getUsuario();
+  }
+
+  isAdmin(): boolean {
+    const usuario = this.getUsuario();
+    if (!usuario || !usuario.roles) return false;
+    // roles podría venir como [{id:..., name:"ROLE_ADMIN"}, ...]
+    return usuario.roles.some((r: any) => r.name === 'ROLE_ADMIN' || r.name === 'ADMIN');
   }
 
   actualizarUsuarioConReserva(nuevaReserva: any): void {
@@ -68,5 +87,4 @@ export class AuthService {
       }
     });
   }
-
 }

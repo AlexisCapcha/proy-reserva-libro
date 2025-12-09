@@ -1,5 +1,7 @@
 package com.libros.reserva_libros.controller;
 
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.security.authentication.*;
@@ -12,13 +14,20 @@ import org.springframework.security.core.AuthenticationException;
 
 import com.libros.reserva_libros.model.User;
 import com.libros.reserva_libros.service.UserService;
+import com.libros.reserva_libros.config.JwtService;
 import com.libros.reserva_libros.dto.LoginRequest;
 import com.libros.reserva_libros.dto.UserLoginResponse;
+
+import java.util.Map;
+
 
 @CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    private JwtService jwtService;
 
     @Autowired
     private UserService userService;
@@ -55,15 +64,22 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-            );
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             User user = userService.encontrarPorUsername(request.getUsername())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-            return ResponseEntity.ok(new UserLoginResponse(user));
+            // Generar token JWT
+            String token = jwtService.generateToken(user.getUsername());
+
+            // Devuelve token y usuario (puedes crear un DTO adecuado)
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", token);
+            response.put("user", user);
+
+            return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales incorrectas");
         }
