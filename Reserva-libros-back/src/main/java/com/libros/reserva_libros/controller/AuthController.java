@@ -16,7 +16,6 @@ import com.libros.reserva_libros.model.User;
 import com.libros.reserva_libros.service.UserService;
 import com.libros.reserva_libros.config.JwtService;
 import com.libros.reserva_libros.dto.LoginRequest;
-import com.libros.reserva_libros.dto.UserLoginResponse;
 
 import java.util.Map;
 
