@@ -16,15 +16,22 @@ export class AuthService {
   login(username: string, password: string): Observable<void> {
     return this.http.post<any>(this.apiUrl, { username, password }).pipe(
       tap(response => {
-        // Si tu backend devuelve { token, user }
-        const token = response.token ?? response?.token; // por seguridad
-        const user = response.user ?? response; // si antes devolvías solo user
+        const token = response.token;
+        const user = response.user ?? response;
+
         if (token) {
           localStorage.setItem('token', token);
         }
+
         localStorage.setItem('usuario', JSON.stringify(user));
         this.userSubject.next(user);
-        this.router.navigate(['/cuenta']);
+
+        // 🔥 Redirección según rol
+        if (this.isAdmin()) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/cuenta']);
+        }
       }),
       map(() => { }),
       catchError(error => {
@@ -33,6 +40,7 @@ export class AuthService {
       })
     );
   }
+
 
   getToken(): string | null {
     return localStorage.getItem('token');

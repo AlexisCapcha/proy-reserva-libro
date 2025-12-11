@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet,RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard-navbar',
@@ -8,5 +9,13 @@ import { RouterOutlet,RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './dashboard-navbar.scss'
 })
 export class DashboardNavbar {
+
+  constructor(
+    private authService: AuthService,  
+  ){}
+
+  logout() {
+    this.authService.logout();
+  }
 
 }

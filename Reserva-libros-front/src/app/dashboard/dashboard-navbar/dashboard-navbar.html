@@ -24,10 +24,20 @@
                     <a class="nav-link" routerLink="/dashboard/reservas" routerLinkActive="active">Reservas Activas</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" routerLink="/dashboard/atrasadas" routerLinkActive="active">Devoluciones Atrasadas</a>
+                    <a class="nav-link" routerLink="/dashboard/atrasadas" routerLinkActive="active">Devoluciones
+                        Atrasadas</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" routerLink="/dashboard/historial" routerLinkActive="active">Historial</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-success nav-link text-white" routerLink="/"><i
+                            class="bi bi-book-fill me-2"></i>Biblioteca</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-danger nav-link text-white" (click)="logout()">
+                        <i class="bi bi-box-arrow-left me-2"></i>Cerrar Sesión
+                    </a>
                 </li>
             </ul>
         </div>

@@ -264,19 +264,6 @@
             </div>
         </div>
     </div>
-    <!-- Toast de éxito en registro -->
-    <div th:if="${registroExitoso}" class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-        <div id="registroToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header bg-success text-white">
-                <strong class="me-auto">Registro exitoso</strong>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
-            </div>
-            <div class="toast-body">
-                ¡Tu registro se completó correctamente! Ahora puedes iniciar sesión.
-            </div>
-        </div>
-    </div>
 
     <!-- Script para auto-ocultar el toast después de 5 segundos -->
     <script th:inline="javascript">

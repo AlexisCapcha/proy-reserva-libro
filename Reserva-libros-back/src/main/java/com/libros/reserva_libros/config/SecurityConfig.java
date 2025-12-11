@@ -49,7 +49,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authenticationProvider(authenticationProvider())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // ⬅️ PERMITIR TODO
+                .anyRequest().permitAll() 
             )
             .formLogin(form -> form.disable())
             .logout(logout -> logout
